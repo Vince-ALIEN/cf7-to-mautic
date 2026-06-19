@@ -7,7 +7,9 @@ zip:
 		--exclude "$(PLUGIN_SLUG)/vendor/*" \
 		--exclude "$(PLUGIN_SLUG)/tests/*" \
 		--exclude "$(PLUGIN_SLUG)/.git/*" \
+		--exclude "$(PLUGIN_SLUG)/.claude/*" \
 		--exclude "$(PLUGIN_SLUG)/composer.json" \
+		--exclude "$(PLUGIN_SLUG)/composer.lock" \
 		--exclude "$(PLUGIN_SLUG)/phpunit.xml" \
 		--exclude "$(PLUGIN_SLUG)/patchwork.json" \
 		--exclude "$(PLUGIN_SLUG)/.phpunit.result.cache" \
