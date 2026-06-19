@@ -1,0 +1,19 @@
+{
+    "name": "ufo-agency/cf7-to-mautic",
+    "description": "CF7 to Mautic WordPress plugin",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0+",
+    "require-dev": {
+        "phpunit/phpunit": "^11.0",
+        "brain/monkey": "^2.6",
+        "mockery/mockery": "^1.6"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CF7Mautic\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}
