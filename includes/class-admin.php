@@ -160,8 +160,8 @@ class CF7Mautic_Admin
                 <?php if ($is_configured): ?>
                     <form method="post" style="margin-top:15px;">
                         <?php wp_nonce_field('mautic_test_connection_nonce'); ?>
-                        <button type="submit" name="mautic_test_connection" class="button button-secondary">
-                            <span class="dashicons dashicons-update" style="vertical-align:middle;"></span>
+                        <button type="submit" name="mautic_test_connection" class="button button-secondary" style="display:inline-flex;align-items:center;gap:6px;">
+                            <span class="dashicons dashicons-update" style="font-size:16px;width:16px;height:16px;line-height:16px;"></span>
                             Tester la connexion
                         </button>
                     </form>

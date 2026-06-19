@@ -5,6 +5,18 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [2.0.1] — 2026-06-19
+
+### Fixed
+
+- **Alignement icône dashicon** dans le bouton "Tester la connexion" : l'icône avait un `font-size` de 20 px par défaut, supérieur à celui du texte, causant un décalage visuel. Corrigé en forçant `font-size`, `width`, `height` et `line-height` à 16 px avec `display:inline-flex` sur le bouton.
+
+### Added
+
+- **`Makefile`** : automatise la création du zip de distribution (`make zip`) et l'exécution des tests PHPUnit (`make test`) depuis le répertoire du plugin.
+
+---
+
 ## [2.0] — 2026-06-19
 
 Ufo Agency — correctifs de robustesse, sécurité et fiabilité.
