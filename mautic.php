@@ -1,5 +1,5 @@
 <?php
-defined("ABSPATH") || exit();
+defined('ABSPATH') || exit();
 
 /**
  * Plugin Name:       CF7 to Mautic
@@ -13,29 +13,29 @@ defined("ABSPATH") || exit();
  * Text Domain:       cf72mautic
  */
 
-define("MAUTIC_PLUGIN_BASENAME", plugin_basename(__FILE__));
-define("MAUTIC_PLUGIN_VERSION", "2.0");
-define("MAUTIC_PLUGIN_DIR", plugin_dir_path(__FILE__));
+define('MAUTIC_PLUGIN_BASENAME', plugin_basename(__FILE__));
+define('MAUTIC_PLUGIN_VERSION', '2.0');
+define('MAUTIC_PLUGIN_DIR', plugin_dir_path(__FILE__));
 
-$includes = [
-    "class-logger.php",
-    "class-settings.php",
-    "class-http-client.php",
-    "class-oauth-authenticator.php",
-    "class-mautic-api.php",
-    "class-admin.php",
-    "class-submission-handler.php",
-    "class-cron-handler.php",
-    "class-uninstall.php",
-];
+$includes = array(
+    'class-logger.php',
+    'class-settings.php',
+    'class-http-client.php',
+    'class-oauth-authenticator.php',
+    'class-mautic-api.php',
+    'class-admin.php',
+    'class-submission-handler.php',
+    'class-cron-handler.php',
+    'class-uninstall.php',
+);
 
 foreach ($includes as $file) {
-    require_once MAUTIC_PLUGIN_DIR . "includes/" . $file;
+    require_once MAUTIC_PLUGIN_DIR . 'includes/' . $file;
 }
 
 CF7Mautic_Admin::init();
 
-add_action("wpcf7_mail_sent", ["CF7Mautic_SubmissionHandler", "handle"]);
-add_action("mautic_process_submission", ["CF7Mautic_CronHandler", "process"]);
+add_action('wpcf7_mail_sent', array('CF7Mautic_SubmissionHandler', 'handle'));
+add_action('mautic_process_submission', array('CF7Mautic_CronHandler', 'process'));
 
-register_uninstall_hook(__FILE__, ["CF7Mautic_Uninstall", "cleanup"]);
+register_uninstall_hook(__FILE__, array('CF7Mautic_Uninstall', 'cleanup'));

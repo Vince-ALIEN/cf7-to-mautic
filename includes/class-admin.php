@@ -1,40 +1,27 @@
 <?php
-defined("ABSPATH") || exit();
+defined('ABSPATH') || exit();
 
 class CF7Mautic_Admin
 {
     public static function init()
     {
-        add_filter("plugin_row_meta", [__CLASS__, "add_row_meta"], 10, 4);
-        add_filter("plugin_action_links_" . MAUTIC_PLUGIN_BASENAME, [
-            __CLASS__,
-            "add_action_links",
-        ]);
-        add_action("admin_menu", [__CLASS__, "add_menu"]);
-        add_action("admin_init", [__CLASS__, "register_settings"]);
+        add_filter('plugin_row_meta', array(__CLASS__, 'add_row_meta'), 10, 4);
+        add_filter('plugin_action_links_' . MAUTIC_PLUGIN_BASENAME, array(__CLASS__, 'add_action_links'));
+        add_action('admin_menu', array(__CLASS__, 'add_menu'));
+        add_action('admin_init', array(__CLASS__, 'register_settings'));
     }
 
-    public static function add_row_meta(
-        $plugin_meta,
-        $plugin_file,
-        $plugin_data,
-        $status,
-    ) {
+    public static function add_row_meta($plugin_meta, $plugin_file, $plugin_data, $status)
+    {
         if (MAUTIC_PLUGIN_BASENAME === $plugin_file) {
-            $plugin_meta[] =
-                '<a href="' .
-                admin_url("options-general.php?page=cf72mautic") .
-                '">Paramètres</a>';
+            $plugin_meta[] = '<a href="' . admin_url('options-general.php?page=cf72mautic') . '">Paramètres</a>';
         }
         return $plugin_meta;
     }
 
     public static function add_action_links($links)
     {
-        $settings_link =
-            '<a href="' .
-            admin_url("options-general.php?page=cf72mautic") .
-            '">Paramètres</a>';
+        $settings_link = '<a href="' . admin_url('options-general.php?page=cf72mautic') . '">Paramètres</a>';
         array_unshift($links, $settings_link);
         return $links;
     }
@@ -42,11 +29,11 @@ class CF7Mautic_Admin
     public static function add_menu()
     {
         add_options_page(
-            "CF7 to Mautic",
-            "CF7 to Mautic",
-            "manage_options",
-            "cf72mautic",
-            [__CLASS__, "render_page"],
+            'CF7 to Mautic',
+            'CF7 to Mautic',
+            'manage_options',
+            'cf72mautic',
+            array(__CLASS__, 'render_page')
         );
     }
 
@@ -55,95 +42,80 @@ class CF7Mautic_Admin
         CF7Mautic_Settings::register();
 
         add_settings_section(
-            "mautic_main_section",
-            "Configuration de la connexion Mautic",
-            [__CLASS__, "render_section"],
-            "cf72mautic",
+            'mautic_main_section',
+            'Configuration de la connexion Mautic',
+            array(__CLASS__, 'render_section'),
+            'cf72mautic'
         );
 
         add_settings_field(
-            "mautic_url",
-            "URL Mautic",
-            [__CLASS__, "render_url_field"],
-            "cf72mautic",
-            "mautic_main_section",
+            'mautic_url',
+            'URL Mautic',
+            array(__CLASS__, 'render_url_field'),
+            'cf72mautic',
+            'mautic_main_section'
         );
 
         add_settings_field(
-            "mautic_client_id",
-            "Client ID",
-            [__CLASS__, "render_client_id_field"],
-            "cf72mautic",
-            "mautic_main_section",
+            'mautic_client_id',
+            'Client ID',
+            array(__CLASS__, 'render_client_id_field'),
+            'cf72mautic',
+            'mautic_main_section'
         );
 
         add_settings_field(
-            "mautic_client_secret",
-            "Client Secret",
-            [__CLASS__, "render_client_secret_field"],
-            "cf72mautic",
-            "mautic_main_section",
+            'mautic_client_secret',
+            'Client Secret',
+            array(__CLASS__, 'render_client_secret_field'),
+            'cf72mautic',
+            'mautic_main_section'
         );
     }
 
     public static function render_section()
     {
-        echo "<p>Configurez les paramètres de connexion à votre instance Mautic via OAuth2.</p>";
-        echo "<p><strong>Pour obtenir vos credentials OAuth2 :</strong></p>";
-        echo "<ol>";
-        echo "<li>Dans Mautic, allez dans <strong>Paramètres &gt; Intégrations &gt; API Credentials</strong></li>";
-        echo "<li>Cliquez sur <strong>+ Nouveau</strong></li>";
-        echo "<li>Sélectionnez <strong>OAuth 2</strong></li>";
+        echo '<p>Configurez les paramètres de connexion à votre instance Mautic via OAuth2.</p>';
+        echo '<p><strong>Pour obtenir vos credentials OAuth2 :</strong></p>';
+        echo '<ol>';
+        echo '<li>Dans Mautic, allez dans <strong>Paramètres &gt; Intégrations &gt; API Credentials</strong></li>';
+        echo '<li>Cliquez sur <strong>+ Nouveau</strong></li>';
+        echo '<li>Sélectionnez <strong>OAuth 2</strong></li>';
         echo '<li>Donnez un nom (ex: "CF7 WordPress")</li>';
         echo '<li>Laissez "Redirect URI" vide ou mettez l\'URL de votre site</li>';
-        echo "<li>Copiez le <strong>Public Key</strong> (Client ID) et le <strong>Secret Key</strong> (Client Secret)</li>";
-        echo "</ol>";
+        echo '<li>Copiez le <strong>Public Key</strong> (Client ID) et le <strong>Secret Key</strong> (Client Secret)</li>';
+        echo '</ol>';
     }
 
     public static function render_url_field()
     {
-        $value = get_option(CF7Mautic_Settings::URL_KEY, "");
-        echo '<input type="text" name="' .
-            CF7Mautic_Settings::URL_KEY .
-            '" value="' .
-            esc_attr($value) .
-            '" class="regular-text" placeholder="mautic.votredomaine.com" />';
+        $value = get_option(CF7Mautic_Settings::URL_KEY, '');
+        echo '<input type="text" name="' . CF7Mautic_Settings::URL_KEY . '" value="' . esc_attr($value) . '" class="regular-text" placeholder="mautic.votredomaine.com" />';
         echo '<p class="description">URL de votre instance Mautic <strong>sans</strong> https://</p>';
     }
 
     public static function render_client_id_field()
     {
-        $value = get_option(CF7Mautic_Settings::CLIENT_ID_KEY, "");
-        echo '<input type="text" name="' .
-            CF7Mautic_Settings::CLIENT_ID_KEY .
-            '" value="' .
-            esc_attr($value) .
-            '" class="regular-text" placeholder="1_abc123..." />';
+        $value = get_option(CF7Mautic_Settings::CLIENT_ID_KEY, '');
+        echo '<input type="text" name="' . CF7Mautic_Settings::CLIENT_ID_KEY . '" value="' . esc_attr($value) . '" class="regular-text" placeholder="1_abc123..." />';
         echo '<p class="description">Public Key de votre application API Mautic</p>';
     }
 
     public static function render_client_secret_field()
     {
-        $value = get_option(CF7Mautic_Settings::CLIENT_SECRET_KEY, "");
-        echo '<input type="password" name="' .
-            CF7Mautic_Settings::CLIENT_SECRET_KEY .
-            '" value="' .
-            esc_attr($value) .
-            '" class="regular-text" placeholder="xyz789..." />';
+        $value = get_option(CF7Mautic_Settings::CLIENT_SECRET_KEY, '');
+        echo '<input type="password" name="' . CF7Mautic_Settings::CLIENT_SECRET_KEY . '" value="' . esc_attr($value) . '" class="regular-text" placeholder="xyz789..." />';
         echo '<p class="description">Secret Key de votre application API Mautic</p>';
     }
 
     public static function render_page()
     {
-        if (!current_user_can("manage_options")) {
+        if (!current_user_can('manage_options')) {
             return;
         }
 
         $test_result = null;
-        if (
-            isset($_POST["mautic_test_connection"]) &&
-            check_admin_referer("mautic_test_connection_nonce")
-        ) {
+        if (isset($_POST['mautic_test_connection']) && check_admin_referer('mautic_test_connection_nonce')) {
             $config = CF7Mautic_Settings::get();
             $api = new CF7Mautic_MauticApi($config);
             $test_result = $api->test_connection();
@@ -162,9 +134,7 @@ class CF7Mautic_Admin
                         <span class="dashicons dashicons-yes-alt"></span>
                         <strong>Configuration complète</strong>
                     </p>
-                    <p>URL Mautic : <code>https://<?php echo esc_html(
-                        $config["url"],
-                    ); ?></code></p>
+                    <p>URL Mautic : <code>https://<?php echo esc_html($config['url']); ?></code></p>
                 <?php else: ?>
                     <p style="color:red;font-size:1.1em;">
                         <span class="dashicons dashicons-warning"></span>
@@ -174,20 +144,14 @@ class CF7Mautic_Admin
                 <?php endif; ?>
 
                 <?php if ($test_result !== null): ?>
-                    <div class="notice <?php echo $test_result["success"]
-                        ? "notice-success"
-                        : "notice-error"; ?> inline" style="margin:10px 0;">
+                    <div class="notice <?php echo $test_result['success'] ? 'notice-success' : 'notice-error'; ?> inline" style="margin:10px 0;">
                         <p>
-                            <?php if ($test_result["success"]): ?>
+                            <?php if ($test_result['success']): ?>
                                 <span class="dashicons dashicons-yes"></span>
-                                <strong>Connexion réussie !</strong> <?php echo esc_html(
-                                    $test_result["message"],
-                                ); ?>
+                                <strong>Connexion réussie !</strong> <?php echo esc_html($test_result['message']); ?>
                             <?php else: ?>
                                 <span class="dashicons dashicons-no"></span>
-                                <strong>Erreur :</strong> <?php echo esc_html(
-                                    $test_result["message"],
-                                ); ?>
+                                <strong>Erreur :</strong> <?php echo esc_html($test_result['message']); ?>
                             <?php endif; ?>
                         </p>
                     </div>
@@ -195,7 +159,7 @@ class CF7Mautic_Admin
 
                 <?php if ($is_configured): ?>
                     <form method="post" style="margin-top:15px;">
-                        <?php wp_nonce_field("mautic_test_connection_nonce"); ?>
+                        <?php wp_nonce_field('mautic_test_connection_nonce'); ?>
                         <button type="submit" name="mautic_test_connection" class="button button-secondary">
                             <span class="dashicons dashicons-update" style="vertical-align:middle;"></span>
                             Tester la connexion
@@ -209,8 +173,8 @@ class CF7Mautic_Admin
                 <form method="post" action="options.php">
                     <?php
                     settings_fields(CF7Mautic_Settings::SETTINGS_GROUP);
-                    do_settings_sections("cf72mautic");
-                    submit_button("Enregistrer les paramètres");
+                    do_settings_sections('cf72mautic');
+                    submit_button('Enregistrer les paramètres');
                     ?>
                 </form>
             </div>
